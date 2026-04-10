@@ -485,8 +485,16 @@ void LocalPlayer::move(f32 dtime, Environment *env,
 	// Determine if jumping is possible
 	m_disable_jump = itemgroup_get(f.groups, "disable_jump") ||
 		itemgroup_get(f1.groups, "disable_jump");
-	m_can_jump = ((touching_ground && !is_climbing) || sneak_can_jump || standing_node_bouncy != 0)
-			&& !m_disable_jump;
+	// 5.1.1 Hybrid Logic: Allow jump if touching ground OR if we are inside a walkable node (pillaring)
+bool is_inside_node = false;
+if (m_client) {
+    const NodeDefManager *nodemgr = m_client->ndef();
+    MapNode n = env->getMap().getNode(floatToInt(m_position + v3f(0, 0.1 * BS, 0), BS));
+    is_inside_node = nodemgr->get(n).walkable;
+}
+
+m_can_jump = ((touching_ground || is_inside_node) && !is_climbing || sneak_can_jump || standing_node_bouncy != 0)
+        && !m_disable_jump;
 	m_disable_descend = itemgroup_get(f.groups, "disable_descend") ||
 		itemgroup_get(f1.groups, "disable_descend");
 
