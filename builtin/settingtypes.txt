@@ -478,7 +478,7 @@ vsync (VSync) bool false
 fps_max_unfocused (FPS when unfocused) int 10 1 4294967295
 
 #    View distance in nodes.
-viewing_range (Viewing range) int 190 20 4000
+viewing_range (Viewing range) int 190 1 4000
 
 #    Undersampling is similar to using a lower screen resolution, but it applies
 #    to the game world only, keeping the GUI intact.
