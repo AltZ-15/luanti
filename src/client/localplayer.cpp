@@ -651,14 +651,12 @@ void LocalPlayer::applyControl(float dtime, Environment *env)
 						speedV.Y = speed_walk;
 				}
 			}
-		} else if (m_can_jump || (control.jump && m_speed.Y >= -0.1f * BS)) {
-    // This allows jumping if you are near the peak (velocity close to 0) 
-    // even if the engine hasn't flagged you as "touching ground" yet.
-    v3f speedJ = getSpeed();
-    speedJ.Y = movement_speed_jump * physics_override.jump;
-    setSpeed(speedJ);
-    m_client->getEventManager()->put(new SimpleTriggerEvent(MtEvent::PLAYER_JUMP));
-}
+		} else if (m_can_jump || (control.jump && getSpeed().Y >= -0.1f * BS)) {
+            v3f speedJ = getSpeed();
+            speedJ.Y = movement_speed_jump * physics_override.jump;
+            setSpeed(speedJ);
+            m_client->getEventManager()->put(new SimpleTriggerEvent(MtEvent::PLAYER_JUMP));
+        }
 		} else if (in_liquid && !m_disable_jump && !control.sneak) {
 			if (fast_climb)
 				speedV.Y = speed_fast;
