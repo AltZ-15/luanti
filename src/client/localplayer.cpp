@@ -652,23 +652,22 @@ void LocalPlayer::applyControl(float dtime, Environment *env)
 				}
 			}
 		} else if (m_can_jump || (control.jump && getSpeed().Y >= -0.1f * BS)) {
-            v3f speedJ = getSpeed();
-            speedJ.Y = movement_speed_jump * physics_override.jump;
-            setSpeed(speedJ);
-            m_client->getEventManager()->put(new SimpleTriggerEvent(MtEvent::PLAYER_JUMP));
-        }
-		} else if (in_liquid && !m_disable_jump && !control.sneak) {
-			if (fast_climb)
-				speedV.Y = speed_fast;
-			else
-				speedV.Y = speed_walk;
-			swimming_vertical = true;
-		} else if (is_climbing && !m_disable_jump && !control.sneak) {
-			if (fast_climb)
-				speedV.Y = speed_fast;
-			else
-				speedV.Y = movement_speed_climb * physics_override.speed_climb;
+			v3f speedJ = getSpeed();
+			speedJ.Y = movement_speed_jump * physics_override.jump;
+			setSpeed(speedJ);
+			m_client->getEventManager()->put(new SimpleTriggerEvent(MtEvent::PLAYER_JUMP));
 		}
+	} else if (in_liquid && !m_disable_jump && !control.sneak) {
+		if (fast_climb)
+			speedV.Y = speed_fast;
+		else
+			speedV.Y = speed_walk;
+		swimming_vertical = true;
+	} else if (is_climbing && !m_disable_jump && !control.sneak) {
+		if (fast_climb)
+			speedV.Y = speed_fast;
+		else
+			speedV.Y = movement_speed_climb * physics_override.speed_climb;
 	}
 
 	// The speed of the player (Y is ignored)
