@@ -1428,14 +1428,6 @@ void Game::processKeyInput()
 			toggleAutoforward();
 	} else if (wasKeyDown(KeyType::INVENTORY)) {
         m_game_formspec.showPlayerInventory(nullptr);
-    } else if (input->wasKeyDown(KeyType::KEY_KEY_X)) { // Using the raw X key
-        client->m_ore_esp_enabled = !client->m_ore_esp_enabled;
-        std::wstring msg = client->m_ore_esp_enabled ? L"Ore ESP: ON" : L"Ore ESP: OFF";
-        m_chat_backend.addMessage(L"", msg);
-    } else if (input->wasKeyDown(KeyType::KEY_KEY_R)) { // Using the raw R key
-        client->m_player_esp_enabled = !client->m_player_esp_enabled;
-        std::wstring msg = client->m_player_esp_enabled ? L"Player ESP: ON" : L"Player ESP: OFF";
-        m_chat_backend.addMessage(L"", msg);
     } else if (input->cancelPressed()) {
 #ifdef __ANDROID__
 		m_android_chat_open = false;
@@ -1536,6 +1528,21 @@ void Game::processKeyInput()
 	if (quicktune->hasMessage()) {
 		m_game_ui->showStatusText(utf8_to_wide(quicktune->getMessage()));
 	}
+static bool x_pressed_last = false;
+	bool x_pressed_now = input->isKeyDown(irr::KEY_KEY_X);
+	if (x_pressed_now && !x_pressed_last) {
+		client->m_ore_esp_enabled = !client->m_ore_esp_enabled;
+		chat_backend->addMessage(L"", client->m_ore_esp_enabled ? L"Ore ESP: ON" : L"Ore ESP: OFF");
+	}
+	x_pressed_last = x_pressed_now;
+
+	static bool r_pressed_last = false;
+	bool r_pressed_now = input->isKeyDown(irr::KEY_KEY_R);
+	if (r_pressed_now && !r_pressed_last) {
+		client->m_player_esp_enabled = !client->m_player_esp_enabled;
+		chat_backend->addMessage(L"", client->m_player_esp_enabled ? L"Player ESP: ON" : L"Player ESP: OFF");
+	}
+	r_pressed_last = r_pressed_now;
 }
 
 void Game::processItemSelection(u16 *new_playeritem)
