@@ -1431,7 +1431,7 @@ void Game::processKeyInput()
         client->m_ore_esp_enabled = !client->m_ore_esp_enabled;
         std::wstring msg = client->m_ore_esp_enabled ? L"Ore ESP: ON" : L"Ore ESP: OFF";
         m_chat_backend.addMessage(L"", msg);
-    } else if (input->wasKeyDown(KeyType::KEY_KEY_P)) { // Using the raw P key
+    } else if (input->wasKeyDown(KeyType::KEY_KEY_R)) { // Using the raw R key
         client->m_player_esp_enabled = !client->m_player_esp_enabled;
         std::wstring msg = client->m_player_esp_enabled ? L"Player ESP: ON" : L"Player ESP: OFF";
         m_chat_backend.addMessage(L"", msg);
