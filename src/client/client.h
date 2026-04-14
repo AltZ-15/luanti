@@ -106,6 +106,11 @@ private:
 class Client : public con::PeerHandler, public InventoryManager, public IGameDef
 {
 public:
+    // Add these here:
+    bool m_ore_esp_enabled = false;
+    bool m_player_esp_enabled = false;
+    content_t c_diamond_ore = 0; // Changed from CONTENT_IGNORE to 0 for safer init
+    content_t c_mese_ore = 0;
 	/*
 		NOTE: Nothing is thread-safe here.
 	*/
@@ -133,10 +138,6 @@ public:
 	 */
 	void Stop();
 
-bool m_ore_esp_enabled = false;
-bool m_player_esp_enabled = false;
-content_t c_diamond_ore = CONTENT_IGNORE;
-content_t c_mese_ore = CONTENT_IGNORE;
 
 	bool isShutdown();
 
