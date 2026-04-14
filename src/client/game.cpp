@@ -1426,7 +1426,10 @@ void Game::processKeyInput()
 		if (g_settings->getBool("continuous_forward"))
 			toggleAutoforward();
 	} else if (wasKeyDown(KeyType::INVENTORY)) {
-		m_game_formspec.showPlayerInventory(nullptr);
+        m_game_formspec.showPlayerInventory(nullptr);
+    } else if (wasKeyDown(KeyType::KEY_KEY_P)) { // Add Player ESP Toggle
+        client->m_player_esp_enabled = !client->m_player_esp_enabled;
+        m_chat_backend.addMessage(L"", client->m_player_esp_enabled ? L"Player ESP: ON" : L"Player ESP: OFF");
 	} else if (input->cancelPressed()) {
 #ifdef __ANDROID__
 		m_android_chat_open = false;
