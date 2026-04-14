@@ -3682,6 +3682,51 @@ void Game::drawScene(ProfilerGraph *graph, RunStats *stats)
 
 	this->m_rendering_engine->draw_scene(sky_color, this->m_game_ui->m_flags.show_hud,
 			draw_wield_tool, draw_crosshair);
+	/*
+        Draw ESP Wireframes
+    */
+    if (client->m_ore_esp_enabled || client->m_player_esp_enabled) {
+        video::IVideoDriver* driver = rendering_engine->get_video_driver();
+        video::SMaterial esp_mat;
+        esp_mat.Lighting = false;
+        esp_mat.ZBuffer = video::ECFN_ALWAYS; // See through walls
+        esp_mat.Thickness = 2.0f;             // Make lines thicker/visible
+        driver->setMaterial(esp_mat);
+        driver->setTransform(video::ETS_WORLD, core::IdentityMatrix);
+
+        if (client->m_ore_esp_enabled) {
+            v3f p_fpos = client->getEnv().getLocalPlayer()->getPosition();
+            v3s16 p_pos = floatToInt(p_fpos, BS);
+            s16 r = 24; // Range
+
+            for (s16 z = p_pos.Z - r; z <= p_pos.Z + r; z++)
+            for (s16 y = p_pos.Y - r; y <= p_pos.Y + r; y++)
+            for (s16 x = p_pos.X - r; x <= p_pos.X + r; x++) {
+                v3s16 p(x, y, z);
+                content_t c = client->getEnv().getClientMap().getNode(p).getContent();
+                if (c == client->c_diamond_ore || c == client->c_mese_ore) {
+                    video::SColor col = (c == client->c_diamond_ore) ? 
+                        video::SColor(255, 0, 255, 255) : video::SColor(255, 255, 255, 0);
+                    core::aabbox3d<f32> box(x*BS-BS/2, y*BS-BS/2, z*BS-BS/2, x*BS+BS/2, y*BS+BS/2, z*BS+BS/2);
+                    driver->draw3DBox(box, col);
+                }
+            }
+        }
+
+        if (client->m_player_esp_enabled) {
+            std::vector<u16> ids;
+            client->getEnv().getActiveObjectsIds(ids);
+            for (u16 id : ids) {
+                ClientActiveObject* obj = client->getEnv().getActiveObject(id);
+                if (obj && obj->getType() == ACTIVEOBJECT_TYPE_PLAYER && !obj->isLocalPlayer()) {
+                    v3f pos = obj->getPosition();
+                    // Standard player height box
+                    core::aabbox3d<f32> bbox(pos.X-0.4f*BS, pos.Y, pos.Z-0.4f*BS, pos.X+0.4f*BS, pos.Y+2.0f*BS, pos.Z+0.4f*BS);
+                    driver->draw3DBox(bbox, video::SColor(255, 255, 0, 0));
+                }
+            }
+        }
+    }
 
 	/*
 		Profiler graph
