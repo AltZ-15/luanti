@@ -133,8 +133,10 @@ public:
 	 */
 	void Stop();
 
-// src/client/client.h inside Client class
-    bool m_player_esp_enabled = false;
+bool m_ore_esp_enabled = false;
+bool m_player_esp_enabled = false;
+content_t c_diamond_ore = CONTENT_IGNORE;
+content_t c_mese_ore = CONTENT_IGNORE;
 
 	bool isShutdown();
 
