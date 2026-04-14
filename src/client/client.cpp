@@ -1934,7 +1934,12 @@ void Client::afterContentReceived()
 	infostream<<"- Rebuilding shaders"<<std::endl;
 	m_rendering_engine->draw_load_screen(wstrgettext("Rebuilding shaders..."),
 			guienv, m_tsrc, 0, 68);
-	m_shsrc->rebuildShaders();
+    m_shsrc->rebuildShaders();
+
+    // Add this:
+    infostream << "- Initializing ESP Node IDs" << std::endl;
+    c_diamond_ore = m_nodedef->getId("default:stone_with_diamond");
+    c_mese_ore    = m_nodedef->getId("default:stone_with_mese");
 
 	// Update node aliases
 	infostream<<"- Updating node aliases"<<std::endl;
