@@ -133,6 +133,8 @@ public:
 	 */
 	void Stop();
 
+// src/client/client.h inside Client class
+    bool m_player_esp_enabled = false;
 
 	bool isShutdown();
 
